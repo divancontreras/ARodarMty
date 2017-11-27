@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "312169273725",
+    "firebase_url": "https://arodarmty.firebaseio.com",
+    "project_id": "arodarmty",
+    "storage_bucket": "arodarmty.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312169273725:android:c71ecea5583c9ec7",
+        "android_client_info": {
+          "package_name": "com.example.divan.arodarmty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312169273725-2486gnlr6a07e2qdglrjb7d0epmr803e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.divan.arodarmty",
+            "certificate_hash": "7546ad2a7727d0c3daa9e76a08ca760c50f8da77"
+          }
+        },
+        {
+          "client_id": "312169273725-5grt5k480ehflue517sj7udid9s88kjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuXAlCTi6NlGbdEcNCS0J2PRXWZf8KGlE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312169273725-5grt5k480ehflue517sj7udid9s88kjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
