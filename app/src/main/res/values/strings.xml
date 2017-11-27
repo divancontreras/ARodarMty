@@ -4,5 +4,16 @@
     <string name="action_name">Action</string>
     <string name="crear">Crear</string>
     <string name="title_activity_on_result">onActivityResult</string>
+    <string name="velocidad">Velocidad</string>
+    <string name="distancia">Distancia</string>
+    <string name="tiempo">Tiempo</string>
+    <string name="crear_evento">Crear Evento</string>
+    <string name="titulo_del_evento">Titulo del evento</string>
+    <string name="agregar_ruta">Agregar Ruta</string>
+    <string name="descipci_n_del_evento">Descipción del evento</string>
+    <string name="fecha">Fecha</string>
+    <string name="hora">Hora</string>
+    <string name="kilometros">Kilometros</string>
+    <string name="agregar_foto">Agregar foto</string>
 
 </resources>

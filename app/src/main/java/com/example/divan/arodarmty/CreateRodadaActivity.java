@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
     TextView date;
     EditText kilometers;
     Calendar selecteddate;
-    Button addimage;
+    ImageButton addimage;
     private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
