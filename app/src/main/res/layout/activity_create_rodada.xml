@@ -32,18 +32,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+
         <Button
+            android:id="@+id/button_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/my_button_bg"
-            android:text="@string/tiempo"/>
+            android:text="@string/tiempo" />
         <Button
             android:layout_width="wrap_content"
+            android:id="@+id/button_distance"
             android:layout_height="wrap_content"
             android:background="@drawable/my_button_bg"
             android:text="@string/distancia"/>
         <Button
             android:layout_width="wrap_content"
+            android:id="@+id/button_speed"
             android:layout_height="wrap_content"
             android:background="@drawable/my_button_bg"
             android:text="@string/velocidad"/>
@@ -71,14 +75,14 @@
             android:layout_marginStart="10dp"
             android:textSize="16sp"/>
     </LinearLayout>
+
     <EditText
         android:id="@+id/textDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/titleInput"
-        android:layout_margin="12dp"
-        android:layout_below="@id/addpicture"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/addpicture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
         android:gravity="start"
         android:hint="@string/descipci_n_del_evento"
         android:inputType="textMultiLine"
@@ -139,34 +143,30 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/kilometers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/kilometros"
-        android:layout_below="@id/timepicker"
-        android:layout_margin="12dp"
-        android:maxLines="1"
-        android:textSize="12sp" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:id="@+id/addpicture"
-        android:layout_below="@id/kilometers">
+        android:layout_width="match_parent"
+        android:layout_marginTop="10px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/timepicker"
+        android:gravity="center_vertical">
+
         <ImageButton
-            android:layout_marginLeft="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/imageinput"
-            android:src="@drawable/ic_insert_photo_black_24dp"
-            android:background="?attr/selectableItemBackground"/>
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/agregar_foto"/>
+            android:layout_marginLeft="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_insert_photo_black_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/agregar_foto"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </RelativeLayout>
