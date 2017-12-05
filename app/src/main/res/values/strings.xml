@@ -15,5 +15,7 @@
     <string name="hora">Hora</string>
     <string name="kilometros">Kilometros</string>
     <string name="agregar_foto">Agregar foto</string>
+    <string name="duration">Duration</string>
+    <string name="duraci_n">Duración</string>
 
 </resources>

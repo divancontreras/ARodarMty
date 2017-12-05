@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFF"
     tools:context="com.example.divan.arodarmty.CreateRodadaActivity">
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
@@ -34,11 +37,11 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/button_time"
+            android:id="@+id/button_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/my_button_bg"
-            android:text="@string/tiempo" />
+            android:text="@string/duraci_n" />
         <Button
             android:layout_width="wrap_content"
             android:id="@+id/button_distance"

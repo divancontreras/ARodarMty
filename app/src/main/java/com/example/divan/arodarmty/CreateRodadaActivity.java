@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +28,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class CreateRodadaActivity extends AppCompatActivity implements DatePickerDialog
         .OnDateSetListener {
@@ -39,10 +43,10 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
     TextView date;
     Calendar selectedDate;
     ImageButton addImage;
-    Button buttonSpeed, buttonDistance, buttonTime;
-    int currentKilometers = 0;
-    int currentMeters = 0;
-    double distance, speed, meters, kilometers;
+    String duration;
+    Button buttonSpeed, buttonDistance, buttonDuration, confDuration;
+    int currentKilometers = 0, currentMeters = 0 , currentHour = 0, currentMinutes = 0;
+    double distance, speed, kilometers;
     private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
@@ -58,10 +62,55 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
         date = findViewById(R.id.dateText);
         buttonDistance = findViewById(R.id.button_distance);
         buttonSpeed = findViewById(R.id.button_speed);
-        buttonTime = findViewById(R.id.button_time);
+        buttonDuration = findViewById(R.id.button_duration);
 
+        buttonDuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final SimpleDateFormat dateFormatIn = new SimpleDateFormat("HH:mm");
+                final SimpleDateFormat dateFormatOut = new SimpleDateFormat("HH:mm");
 
-        buttonTime.setOnClickListener(View);
+                LayoutInflater inflater = getLayoutInflater();
+                View durationView = inflater.inflate(R.layout.activity_numpicker_duration,null,false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateRodadaActivity.this);
+                builder.setView(durationView);
+                builder.setTitle("Duración");
+                final AlertDialog alertDialog = builder.create();
+                final NumberPicker minutesPicker = durationView.findViewById(R.id.minutesPicker);
+                final NumberPicker hoursPicker = durationView.findViewById(R.id.hoursPicker);
+                Button confDuration = durationView.findViewById(R.id.okduration);
+
+                //Number picker for Hours
+                hoursPicker.setMaxValue(23);
+                hoursPicker.setMinValue(0);
+                hoursPicker.setValue(currentHour);
+
+                //Number picker for Minutes
+                minutesPicker.setMaxValue(59);
+                minutesPicker.setMinValue(0);
+                minutesPicker.setValue(currentMinutes);
+                confDuration.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        minutesPicker.clearFocus();
+                        hoursPicker.clearFocus();
+                        currentHour = hoursPicker.getValue();
+                        currentMinutes = minutesPicker.getValue();
+                        Date date;
+                        String dateIn = String.valueOf(hoursPicker.getValue()) + ":" + String.valueOf(minutesPicker.getValue());
+                        try {
+                            date = dateFormatIn.parse(dateIn);
+                            buttonDuration.setText(dateFormatOut.format(date));
+                        }catch(ParseException e){
+                            throw new IllegalArgumentException("Invalid date Format " + dateIn);
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+            }
+
+        });
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,10 +124,6 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
         buttonDistance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                numberPickerDialog();
-            }
-
-            private void numberPickerDialog() {
                 LinearLayout LL = new LinearLayout(CreateRodadaActivity.this);
                 LL.setOrientation(LinearLayout.HORIZONTAL);
                 //Number picker for Kilometers
@@ -100,10 +145,10 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
                 params.gravity = Gravity.CENTER;
                 LinearLayout.LayoutParams kilometersParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                kilometersParams.weight = 4;
+                kilometersParams.weight = 1;
 
                 LinearLayout.LayoutParams metersParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                metersParams.weight = 4;
+                metersParams.weight = 1;
 
                 LL.setLayoutParams(params);
                 LL.addView(kilometersPicker,kilometersParams);
