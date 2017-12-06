@@ -45,7 +45,7 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
     ImageButton addImage;
     String duration;
     Button buttonSpeed, buttonDistance, buttonDuration, confDuration;
-    int currentKilometers = 0, currentMeters = 0 , currentHour = 0, currentMinutes = 0;
+    int currentKilometers = 0, currentMeters = 0 , currentHour = 0, currentMinutes = 0, currentKmHour = 0, currentMeterHour = 0;
     double distance, speed, kilometers;
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -74,7 +74,6 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
                 View durationView = inflater.inflate(R.layout.activity_numpicker_duration,null,false);
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateRodadaActivity.this);
                 builder.setView(durationView);
-                builder.setTitle("Duración");
                 final AlertDialog alertDialog = builder.create();
                 final NumberPicker minutesPicker = durationView.findViewById(R.id.minutesPicker);
                 final NumberPicker hoursPicker = durationView.findViewById(R.id.hoursPicker);
@@ -112,6 +111,52 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
 
         });
 
+        buttonSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LayoutInflater inflater = getLayoutInflater();
+                View speedView = inflater.inflate(R.layout.activity_numpicker_speed,null,false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateRodadaActivity.this);
+                builder.setView(speedView);
+                builder.setTitle(R.string.velocidad);
+                final AlertDialog alertDialog = builder.create();
+                final NumberPicker kmHourPicker = speedView.findViewById(R.id.kmhour);
+                final NumberPicker metersHourPicker = speedView.findViewById(R.id.metershour);
+                final NumberPicker unitsPicker = speedView.findViewById(R.id.unitspicker);
+                Button confSpeed = speedView.findViewById(R.id.okspeed);
+
+                //Number picker for Km/Hours
+                kmHourPicker.setMaxValue(99);
+                kmHourPicker.setMinValue(0);
+                kmHourPicker.setValue(currentKmHour);
+
+                //unitsPicker
+                unitsPicker.setMinValue(0);
+                unitsPicker.setMaxValue(0);
+                unitsPicker.setDisplayedValues(new String[] {"km/hr"});
+
+                //Number picker for Meters/Hours
+                metersHourPicker.setMinValue(0);
+                metersHourPicker.setMaxValue(9);
+                metersHourPicker.setValue(currentMeterHour);
+                metersHourPicker.setDisplayedValues(floatNums);
+                metersHourPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                unitsPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                confSpeed.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        currentKmHour = kmHourPicker.getValue();
+                        currentMeterHour = metersHourPicker.getValue();
+                        speed = kmHourPicker.getValue() + Double.parseDouble(floatNums[metersHourPicker.getValue()]);
+                        buttonSpeed.setText(String.valueOf(speed));
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+            }
+
+        });
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

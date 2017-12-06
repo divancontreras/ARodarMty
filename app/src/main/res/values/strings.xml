@@ -4,7 +4,6 @@
     <string name="action_name">Action</string>
     <string name="crear">Crear</string>
     <string name="title_activity_on_result">onActivityResult</string>
-    <string name="velocidad">Velocidad</string>
     <string name="distancia">Distancia</string>
     <string name="tiempo">Tiempo</string>
     <string name="crear_evento">Crear Evento</string>
@@ -17,5 +16,6 @@
     <string name="agregar_foto">Agregar foto</string>
     <string name="duration">Duration</string>
     <string name="duraci_n">Duración</string>
+    <string name="velocidad">Velocidad</string>
 
 </resources>
