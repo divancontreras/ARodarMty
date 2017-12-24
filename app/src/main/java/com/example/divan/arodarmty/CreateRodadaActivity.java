@@ -1,6 +1,7 @@
 package com.example.divan.arodarmty;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.divan.arodarmty.model.Rodada;
@@ -40,13 +42,16 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
     String[] floatNums = {".0",".1", ".2", ".3", ".4", ".5", ".6", ".7", ".8", ".9"};
     EditText title;
     EditText description;
-    TextView date;
+    TextView datetext;
+    TextView HourText;
+    LinearLayout date;
+    LinearLayout hour;
     Calendar selectedDate;
+    Calendar selectedHour;
     ImageButton addImage;
-    String duration;
-    Button buttonSpeed, buttonDistance, buttonDuration, confDuration;
-    int currentKilometers = 0, currentMeters = 0 , currentHour = 0, currentMinutes = 0, currentKmHour = 0, currentMeterHour = 0;
-    double distance, speed, kilometers;
+    Button buttonSpeed, buttonDistance, buttonDuration;
+    int currentKilometers = 0, currentMeters = 0 , currentHour = 0, currentMinutes = 0, currentKmHour = 0, currentMeterHour = 0, hora, minutos;
+    double speed, kilometers;
     private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
@@ -57,9 +62,12 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
         storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
         title = findViewById(R.id.titleInput);
+        HourText = findViewById(R.id.HourText);
         description = findViewById(R.id.textDescription);
         addImage = findViewById(R.id.imageinput);
-        date = findViewById(R.id.dateText);
+        datetext = findViewById(R.id.dateText);
+        date = findViewById(R.id.pickadate);
+        hour = findViewById(R.id.pickahour);
         buttonDistance = findViewById(R.id.button_distance);
         buttonSpeed = findViewById(R.id.button_speed);
         buttonDuration = findViewById(R.id.button_duration);
@@ -83,11 +91,12 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
                 hoursPicker.setMaxValue(23);
                 hoursPicker.setMinValue(0);
                 hoursPicker.setValue(currentHour);
-
+                hoursPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 //Number picker for Minutes
                 minutesPicker.setMaxValue(59);
                 minutesPicker.setMinValue(0);
                 minutesPicker.setValue(currentMinutes);
+                minutesPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 confDuration.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -111,15 +120,58 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
 
         });
 
+        buttonDistance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = getLayoutInflater();
+                View distancenView = inflater.inflate(R.layout.activity_numberpicker_distance,null,false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateRodadaActivity.this);
+                builder.setView(distancenView);
+                final AlertDialog alertDialog = builder.create();
+                final NumberPicker kilometersPicker = distancenView.findViewById(R.id.kilometers);
+                kilometersPicker.setMaxValue(999);
+                kilometersPicker.setMinValue(0);
+                kilometersPicker.setValue(currentKilometers);
+                kilometersPicker.setWrapSelectorWheel(false);
+
+                //Number picker for Meters
+                final NumberPicker metersPicker = distancenView.findViewById(R.id.meters);
+                metersPicker.setMaxValue(9);
+                metersPicker.setMinValue(0);
+                metersPicker.setDisplayedValues(floatNums);
+                metersPicker.setValue(currentMeters);
+                metersPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                metersPicker.clearFocus();
+                kilometersPicker.clearFocus();
+                Button confDistance = distancenView.findViewById(R.id.okdistance);
+
+                final NumberPicker unitsDistance = distancenView.findViewById(R.id.unitsdistance);
+                unitsDistance.setDisplayedValues(new String[] {"km"});
+
+                confDistance.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        kilometersPicker.clearFocus();
+                        metersPicker.clearFocus();
+                        currentKilometers = kilometersPicker.getValue();
+                        currentMeters = metersPicker.getValue();
+                        kilometers = kilometersPicker.getValue() + Double.parseDouble(floatNums[metersPicker.getValue()]);
+                        buttonDistance.setText(String.valueOf(kilometers));
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+            }
+
+        });
+
         buttonSpeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 LayoutInflater inflater = getLayoutInflater();
                 View speedView = inflater.inflate(R.layout.activity_numpicker_speed,null,false);
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateRodadaActivity.this);
                 builder.setView(speedView);
-                builder.setTitle(R.string.velocidad);
                 final AlertDialog alertDialog = builder.create();
                 final NumberPicker kmHourPicker = speedView.findViewById(R.id.kmhour);
                 final NumberPicker metersHourPicker = speedView.findViewById(R.id.metershour);
@@ -132,20 +184,20 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
                 kmHourPicker.setValue(currentKmHour);
 
                 //unitsPicker
-                unitsPicker.setMinValue(0);
-                unitsPicker.setMaxValue(0);
                 unitsPicker.setDisplayedValues(new String[] {"km/hr"});
+                unitsPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
                 //Number picker for Meters/Hours
                 metersHourPicker.setMinValue(0);
                 metersHourPicker.setMaxValue(9);
-                metersHourPicker.setValue(currentMeterHour);
                 metersHourPicker.setDisplayedValues(floatNums);
+                metersHourPicker.setValue(currentMeterHour);
                 metersHourPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                unitsPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
                 confSpeed.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        kmHourPicker.clearFocus();
                         currentKmHour = kmHourPicker.getValue();
                         currentMeterHour = metersHourPicker.getValue();
                         speed = kmHourPicker.getValue() + Double.parseDouble(floatNums[metersHourPicker.getValue()]);
@@ -166,56 +218,23 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
             }
         });
 
-        buttonDistance.setOnClickListener(new View.OnClickListener() {
+        hour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LinearLayout LL = new LinearLayout(CreateRodadaActivity.this);
-                LL.setOrientation(LinearLayout.HORIZONTAL);
-                //Number picker for Kilometers
-                final NumberPicker kilometersPicker = new NumberPicker(CreateRodadaActivity.this);
-                kilometersPicker.setMaxValue(999);
-                kilometersPicker.setMinValue(0);
-                kilometersPicker.setValue(currentKilometers);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateRodadaActivity.this, new TimePickerDialog.OnTimeSetListener() {
 
-                //Number picker for Meters
-                final NumberPicker metersPicker = new NumberPicker(CreateRodadaActivity.this);
-                metersPicker.setMaxValue(9);
-                metersPicker.setMinValue(0);
-                metersPicker.setDisplayedValues(floatNums);
-                metersPicker.setValue(currentMeters);
-                metersPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                metersPicker.clearFocus();
-                kilometersPicker.clearFocus();
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
-                params.gravity = Gravity.CENTER;
-                LinearLayout.LayoutParams kilometersParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                kilometersParams.weight = 1;
-
-                LinearLayout.LayoutParams metersParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                metersParams.weight = 1;
-
-                LL.setLayoutParams(params);
-                LL.addView(kilometersPicker,kilometersParams);
-                LL.addView(metersPicker,metersParams);
-                AlertDialog.Builder builder = new AlertDialog.Builder(CreateRodadaActivity.this);
-                builder.setView(LL);
-                kilometersPicker.setWrapSelectorWheel(false);
-                builder.setTitle("Distancia (Km)");
-                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        kilometersPicker.clearFocus();
-                        metersPicker.clearFocus();
-                        currentKilometers = kilometersPicker.getValue();
-                        currentMeters = metersPicker.getValue();
-                        kilometers = kilometersPicker.getValue() + Double.parseDouble(floatNums[metersPicker.getValue()]);
-                        buttonDistance.setText(String.valueOf(kilometers));
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+                        selectedHour = Calendar.getInstance();
+                        hora = selectedHour.get(Calendar.HOUR_OF_DAY);
+                        minutos = selectedHour.get(Calendar.MINUTE);
+                        HourText.setText(hourOfDay + ":" + minutes);
                     }
-                });
-                builder.show();
+                }, hora, minutos, false);
+                    timePickerDialog.show();
             }
         });
+
 
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,14 +280,14 @@ public class CreateRodadaActivity extends AppCompatActivity implements DatePicke
                         });
 
         }
-        ;
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        date.setText(dayOfMonth + "/" + month + "/" + year);
+        datetext.setText(dayOfMonth + "/" + month + "/" + year);
         selectedDate = Calendar.getInstance();
         selectedDate.set(year, month, dayOfMonth);
     }
+
 }

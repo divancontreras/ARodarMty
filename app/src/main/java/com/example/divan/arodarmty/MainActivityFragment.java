@@ -102,6 +102,7 @@ public class MainActivityFragment extends Fragment {
             kilometers = itemView.findViewById(R.id.date);
             date = itemView.findViewById(R.id.kilometers);
 
+
         }
 
         public void bindData(Rodada rodada){
